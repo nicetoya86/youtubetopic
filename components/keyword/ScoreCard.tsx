@@ -1,4 +1,4 @@
-import { TrendingUp, AlertCircle, CheckCircle } from 'lucide-react'
+import { TrendingUp, AlertCircle, CheckCircle, Info } from 'lucide-react'
 import Card from '@/components/ui/Card'
 
 interface ScoreCardProps {
@@ -57,12 +57,29 @@ export default function ScoreCard({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Revenue Score */}
         <div className="glass-light rounded-xl p-6">
-          <div className="text-sm text-gray-400 mb-2">수익성 점수</div>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="text-sm text-gray-400">수익성 점수</div>
+            <div className="group relative">
+              <Info className="w-4 h-4 text-gray-500 cursor-help" />
+              <div className="invisible group-hover:visible absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 shadow-xl">
+                <div className="font-semibold text-white mb-1">수익성 점수란?</div>
+                조회수, CPM, 참여율, 경쟁도를 종합 분석한 점수입니다.
+                <div className="mt-2 space-y-1">
+                  <div>• 7점 이상: 높은 수익 가능성</div>
+                  <div>• 5-7점: 중간 수익 가능성</div>
+                  <div>• 5점 미만: 낮은 수익 가능성</div>
+                </div>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                  <div className="border-4 border-transparent border-t-slate-800"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className={`text-5xl font-bold ${getScoreColor(revenueScore)} mb-2`}>
             {revenueScore.toFixed(1)}
             <span className="text-2xl text-gray-500">/10</span>
           </div>
-          <div className="flex gap-1 justify-center mt-3">
+          <div className="flex gap-1 justify-center mt-3 mb-2">
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
@@ -77,6 +94,9 @@ export default function ScoreCard({
                 }`}
               />
             ))}
+          </div>
+          <div className="text-xs text-gray-500 mt-3">
+            조회수 • CPM • 참여율 • 경쟁도 종합
           </div>
         </div>
 
