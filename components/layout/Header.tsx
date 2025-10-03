@@ -11,6 +11,7 @@ export default function Header() {
   const navItems = [
     { label: '숏폼 추천', href: '/shorts' },
     { label: '롱폼 추천', href: '/long-form' },
+    { label: '키워드 검색', href: '/keyword-search' },
     { label: '트렌드 분석', href: '/trends' },
     { label: '도구', href: '/tools' },
   ]
@@ -44,12 +45,13 @@ export default function Header() {
 
           {/* Right Actions */}
           <div className="flex items-center space-x-3 md:space-x-4">
-            <button
+            <Link
+              href="/keyword-search"
               aria-label="검색"
               className="p-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
             >
               <Search className="w-5 h-5" />
-            </button>
+            </Link>
 
             <div className="hidden md:block">
               <Button size="sm" variant="primary">
