@@ -1,0 +1,19 @@
+====================================
+.env.local 파일에 복사할 내용
+====================================
+
+NEXT_PUBLIC_SUPABASE_URL=https://hpvmpwuffvhnzazasfki.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwdm1wd3VmZnZobnphemFzZmtpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NzIzMDIsImV4cCI6MjA3NTA0ODMwMn0.SGfBhEX4LAGISTaGQB__MCUaDSQTratMsgBjWQc6NO4
+YOUTUBE_API_KEY=AIzaSyA9cLHqYE2meAtEmYEP7fYvg2G1-S0gHCQ
+
+====================================
+사용 방법:
+====================================
+
+1. 프로젝트 루트 (youtube1 폴더)에서
+2. 새 파일 생성: .env.local
+3. 위 3줄을 복사해서 붙여넣기
+4. 저장 (Ctrl+S)
+
+완료!
+

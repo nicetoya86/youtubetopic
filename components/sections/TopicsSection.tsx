@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { TrendingUp, Eye, Target, ArrowRight } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
+import { supabase } from '@/lib/supabase'
 
 interface Topic {
   id: string
@@ -19,8 +20,55 @@ interface Topic {
 
 export default function TopicsSection() {
   const [activeTab, setActiveTab] = useState<'shorts' | 'long'>('shorts')
+  const [topics, setTopics] = useState<Topic[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // 샘플 데이터
+  useEffect(() => {
+    fetchTopics()
+  }, [activeTab])
+
+  async function fetchTopics() {
+    setLoading(true)
+    const contentType = activeTab === 'shorts' ? 'short' : 'long'
+    
+    const { data, error } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('content_type', contentType)
+      .eq('is_active', true)
+      .order('revenue_score', { ascending: false })
+      .limit(4)
+
+    if (error) {
+      console.error('Error fetching topics:', error)
+      setLoading(false)
+      return
+    }
+
+    if (data) {
+      const formattedTopics: Topic[] = data.map((topic: any) => ({
+        id: topic.id,
+        title: topic.title,
+        category: topic.category,
+        revenueScore: topic.revenue_score,
+        competition: topic.competition_level,
+        avgViews: formatViews(topic.avg_views),
+        cpm: `$${topic.estimated_cpm.toFixed(0)}`,
+        trending: topic.revenue_score >= 9,
+      }))
+      setTopics(formattedTopics)
+    }
+    setLoading(false)
+  }
+
+  function formatViews(views: number): string {
+    if (views >= 1000000) {
+      return `${(views / 1000000).toFixed(1)}M`
+    }
+    return `${(views / 1000).toFixed(0)}K`
+  }
+
+  // 백업 샘플 데이터 (로딩 중이거나 에러 시)
   const shortTopics: Topic[] = [
     {
       id: '1',
@@ -107,8 +155,8 @@ export default function TopicsSection() {
     },
   ]
 
-  const topics = activeTab === 'shorts' ? shortTopics : longTopics
-
+  // topics는 이제 state로 관리됨 (위에서 선언)
+  
   const getCompetitionBadge = (competition: string) => {
     switch (competition) {
       case 'low':
@@ -162,8 +210,18 @@ export default function TopicsSection() {
         </div>
 
         {/* Topics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {topics.map((topic, index) => (
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-cyan"></div>
+            <p className="text-gray-400 mt-4">데이터 로딩 중...</p>
+          </div>
+        ) : topics.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-400 text-lg">주제를 찾을 수 없습니다.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {topics.map((topic, index) => (
             <Card
               key={topic.id}
               hover
@@ -232,8 +290,9 @@ export default function TopicsSection() {
                 </button>
               </div>
             </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center">

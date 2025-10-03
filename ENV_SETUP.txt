@@ -1,0 +1,20 @@
+✅ Supabase 설정 완료!
+
+프로젝트 루트에 .env.local 파일을 만들고 아래 내용을 복사하세요:
+
+================================
+# Supabase (MCP로 자동 생성됨)
+NEXT_PUBLIC_SUPABASE_URL=https://hpvmpwuffvhnzazasfki.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwdm1wd3VmZnZobnphemFzZmtpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0NzIzMDIsImV4cCI6MjA3NTA0ODMwMn0.SGfBhEX4LAGISTaGQB__MCUaDSQTratMsgBjWQc6NO4
+
+# YouTube Data API v3 (발급 필요)
+YOUTUBE_API_KEY=여기에_발급받은_유튜브_API_키_입력
+================================
+
+YouTube API 키 발급 방법:
+1. https://console.cloud.google.com 접속
+2. 새 프로젝트 생성 (youtubetopic)
+3. "YouTube Data API v3" 검색 후 활성화
+4. 사용자 인증 정보 → API 키 만들기
+5. API 키를 위 파일의 YOUTUBE_API_KEY에 붙여넣기
+
