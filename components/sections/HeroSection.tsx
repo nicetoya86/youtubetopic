@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import FloatingOrbs from '@/components/3d/FloatingOrbs'
+import ParticleField from '@/components/3d/ParticleField'
 
 export default function HeroSection() {
   return (
@@ -13,9 +15,11 @@ export default function HeroSection() {
       {/* Animated Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/50"></div>
 
-      {/* Floating Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-cyan/30 rounded-full filter blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-pink/20 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+      {/* 3D Floating Orbs */}
+      <FloatingOrbs />
+      
+      {/* Particle Field */}
+      <ParticleField />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">

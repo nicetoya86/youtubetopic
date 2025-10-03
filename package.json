@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fetch-data": "tsx scripts/fetch-youtube-data.ts",
+    "fetch-data": "tsx scripts/sync-youtube-to-supabase.ts",
     "db:setup": "tsx scripts/setup-database.ts",
     "add-topics": "tsx scripts/add-trending-topics.ts"
   },

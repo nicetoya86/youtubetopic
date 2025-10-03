@@ -13,12 +13,15 @@ export default function Card({ children, className, hover = false, glass = true,
   return (
     <div
       className={cn(
-        'rounded-2xl p-6',
+        'rounded-2xl p-6 transition-transform duration-300',
         glass ? 'glass' : 'bg-slate-800',
-        hover && 'hover-lift cursor-pointer',
+        hover && 'hover-lift cursor-pointer hover:scale-105',
         className
       )}
-      style={style}
+      style={{
+        ...style,
+        transformStyle: 'preserve-3d',
+      }}
     >
       {children}
     </div>
