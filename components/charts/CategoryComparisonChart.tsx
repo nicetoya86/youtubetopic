@@ -18,10 +18,52 @@ const defaultData = [
   { category: '금융', avgViews: 52000, cpm: 18.2, competition: 32 },
   { category: '기술', avgViews: 95000, cpm: 14.0, competition: 55 },
   { category: '라이프스타일', avgViews: 110000, cpm: 8.5, competition: 68 },
-  { category: '게임', avgViews: 145000, cpm: 6.2, competition: 92 },
+  { category: '기타', avgViews: 145000, cpm: 6.2, competition: 92 },
 ]
 
 const COLORS = ['#00E5FF', '#FF00FF', '#FFD700', '#00FF88', '#FF6B6B', '#A78BFA']
+
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload
+    return (
+      <div 
+        style={{
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          border: '2px solid rgba(255,255,255,0.2)',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        }}
+      >
+        <p style={{ 
+          color: '#fff', 
+          fontWeight: 'bold', 
+          fontSize: '15px',
+          marginBottom: '8px',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+          paddingBottom: '8px'
+        }}>
+          {label}
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <p style={{ color: '#00E5FF', fontSize: '13px', fontWeight: '600' }}>
+            평균 조회수: {data.avgViews.toLocaleString()}
+          </p>
+          <p style={{ color: '#FFD700', fontSize: '13px', fontWeight: '600' }}>
+            CPM: ${data.cpm}
+          </p>
+          <p style={{ color: '#FF6B6B', fontSize: '13px', fontWeight: '600' }}>
+            경쟁도: {data.competition}%
+          </p>
+        </div>
+      </div>
+    )
+  }
+  return null
+}
 
 export default function CategoryComparisonChart({ data = defaultData }: CategoryComparisonChartProps) {
   return (
@@ -51,21 +93,7 @@ export default function CategoryComparisonChart({ data = defaultData }: Category
             style={{ fontSize: '12px' }}
             label={{ value: '평균 조회수', angle: -90, position: 'insideLeft', style: { fill: '#9CA3AF' } }}
           />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: 'rgba(15, 23, 42, 0.9)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-              backdropFilter: 'blur(10px)',
-            }}
-            labelStyle={{ color: '#E5E7EB', fontWeight: 'bold' }}
-            formatter={(value: any, name: string) => {
-              if (name === 'avgViews') return [value.toLocaleString(), '평균 조회수']
-              if (name === 'cpm') return [`$${value}`, 'CPM']
-              if (name === 'competition') return [`${value}%`, '경쟁도']
-              return [value, name]
-            }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend
             wrapperStyle={{ paddingTop: '20px' }}
             formatter={(value) => {
