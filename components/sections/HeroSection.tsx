@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
@@ -18,29 +19,45 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
+        <div className="max-w-5xl mx-auto space-y-8">
           {/* Badge */}
-          <div className="inline-flex items-center space-x-2 glass-light px-4 py-2 rounded-full">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center space-x-2 glass-light px-4 py-2 rounded-full">
             <TrendingUp className="w-4 h-4 text-primary-cyan" />
             <span className="text-sm text-gray-300">매월 1일 새로운 주제 업데이트</span>
-          </div>
+          </motion.div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
             데이터로 찾는
             <br />
             <span className="text-gradient">수익형 컨텐츠</span>
-          </h1>
+          </motion.h1>
 
           {/* Subheading */}
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             AI가 분석한 유튜브 트렌드로 숏폼과 롱폼 주제를 추천받으세요.
             <br className="hidden sm:block" />
             높은 수익성, 낮은 경쟁의 컨텐츠 주제를 지금 바로 시작하세요.
-          </p>
+          </motion.p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Button size="lg" variant="primary" className="w-full sm:w-auto group">
               숏폼 주제 보기
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -48,10 +65,14 @@ export default function HeroSection() {
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
               롱폼 주제 보기
             </Button>
-          </div>
+          </motion.div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto pt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto pt-8">
             <div className="glass-light rounded-2xl p-4 md:p-6">
               <div className="text-2xl md:text-4xl font-bold text-gradient">150+</div>
               <div className="text-xs md:text-sm text-gray-400 mt-1">추천 주제</div>
@@ -64,7 +85,7 @@ export default function HeroSection() {
               <div className="text-2xl md:text-4xl font-bold text-gradient">24/7</div>
               <div className="text-xs md:text-sm text-gray-400 mt-1">실시간 분석</div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scroll Indicator */}
