@@ -54,9 +54,11 @@ export default function Header() {
             </Link>
 
             <div className="hidden md:block">
-              <Button size="sm" variant="primary">
-                시작하기
-              </Button>
+              <Link href="/shorts">
+                <Button size="sm" variant="primary">
+                  시작하기
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -89,9 +91,11 @@ export default function Header() {
                 </Link>
               ))}
               <div className="px-4 pt-2">
-                <Button size="md" variant="primary" className="w-full">
-                  시작하기
-                </Button>
+                <Link href="/shorts">
+                  <Button size="md" variant="primary" className="w-full">
+                    시작하기
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

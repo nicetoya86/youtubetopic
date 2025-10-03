@@ -1,18 +1,24 @@
 import Link from 'next/link'
 import { Youtube, Mail, Github } from 'lucide-react'
 
+interface FooterLink {
+  label: string
+  href: string
+  external?: boolean
+}
+
 export default function Footer() {
   const footerLinks = {
     product: [
       { label: '숏폼 추천', href: '/shorts' },
       { label: '롱폼 추천', href: '/long-form' },
       { label: '트렌드 분석', href: '/trends' },
-      { label: '수익 계산기', href: '/tools/calculator' },
+      { label: '수익 계산기', href: '/tools' },
     ],
     company: [
-      { label: '소개', href: '/about' },
-      { label: '블로그', href: '/blog' },
-      { label: '문의하기', href: '/contact' },
+      { label: '소개', href: 'https://www.youtube.com/', external: true },
+      { label: '블로그', href: 'https://www.youtube.com/', external: true },
+      { label: '문의하기', href: 'mailto:nicetoya@naver.com', external: true },
     ],
     legal: [
       { label: '이용약관', href: '/terms' },
@@ -48,7 +54,7 @@ export default function Footer() {
                 <Youtube className="w-5 h-5" />
               </a>
               <a
-                href="mailto:contact@example.com"
+                href="mailto:nicetoya@naver.com"
                 className="text-gray-400 hover:text-primary-cyan transition-colors"
                 aria-label="Email"
               >
@@ -89,12 +95,23 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                      rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                      className="text-gray-400 hover:text-white transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-gray-400 hover:text-white transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
