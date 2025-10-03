@@ -4,6 +4,30 @@
  * 실행 방법: npx tsx scripts/fetch-youtube-data.ts
  */
 
+import * as fs from 'fs'
+import * as path from 'path'
+
+// .env.local 파일 읽기
+function loadEnvFile() {
+  const envPath = path.join(process.cwd(), '.env.local')
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf-8')
+    envContent.split('\n').forEach(line => {
+      const trimmed = line.trim()
+      if (trimmed && !trimmed.startsWith('#')) {
+        const [key, ...valueParts] = trimmed.split('=')
+        const value = valueParts.join('=')
+        if (key && value) {
+          process.env[key.trim()] = value.trim()
+        }
+      }
+    })
+  }
+}
+
+// 환경 변수 로드
+loadEnvFile()
+
 interface VideoData {
   id: string
   title: string
