@@ -1,4 +1,5 @@
 import { ArrowRight, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 import Button from '@/components/ui/Button'
 
 export default function CTASection() {
@@ -48,13 +49,17 @@ export default function CTASection() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button size="lg" variant="primary" className="w-full sm:w-auto group">
-              주제 추천 받기
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="ghost" className="w-full sm:w-auto">
-              데모 영상 보기
-            </Button>
+            <Link href="/shorts" className="w-full sm:w-auto">
+              <Button size="lg" variant="primary" className="w-full sm:w-auto group">
+                주제 추천 받기
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link href="/keyword-search" className="w-full sm:w-auto">
+              <Button size="lg" variant="ghost" className="w-full sm:w-auto">
+                키워드 검색하기
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

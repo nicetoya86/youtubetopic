@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, TrendingUp } from 'lucide-react'
+import Link from 'next/link'
 import Button from '@/components/ui/Button'
 import FloatingOrbs from '@/components/3d/FloatingOrbs'
 import ParticleField from '@/components/3d/ParticleField'
@@ -62,13 +63,17 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button size="lg" variant="primary" className="w-full sm:w-auto group">
-              숏폼 주제 보기
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto">
-              롱폼 주제 보기
-            </Button>
+            <Link href="/shorts" className="w-full sm:w-auto">
+              <Button size="lg" variant="primary" className="w-full sm:w-auto group">
+                숏폼 주제 보기
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Link href="/long-form" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                롱폼 주제 보기
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}
