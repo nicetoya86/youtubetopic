@@ -223,11 +223,12 @@ function analyzeVideos(videos: any[], type: 'short' | 'long') {
   const avgComments = Math.round(totalComments / videos.length)
   const engagementRate = totalViews > 0 ? ((totalLikes + totalComments) / totalViews) * 100 : 0
 
-  // CPM 추정 (카테고리별 평균)
-  const estimatedCPM = type === 'short' ? 5.5 : 10.0
+  // CPM 추정 (카테고리별 평균 - 개선)
+  const categoryIds = videos.map(v => v.snippet.categoryId)
+  const estimatedCPM = calculateEstimatedCPM(categoryIds, type)
 
-  // 경쟁 강도
-  const competition = videos.length < 15 ? 'low' : videos.length < 35 ? 'medium' : 'high'
+  // 경쟁 강도 (영상 개수 + 평균 조회수 고려)
+  const competition = calculateCompetition(videos.length, avgViews, type)
 
   return {
     video_count: videos.length,
@@ -241,19 +242,116 @@ function analyzeVideos(videos: any[], type: 'short' | 'long') {
   }
 }
 
+// 카테고리별 CPM 계산 (개선)
+function calculateEstimatedCPM(categoryIds: string[], type: 'short' | 'long'): number {
+  // 유튜브 카테고리별 평균 CPM (업계 표준)
+  const categoryBaseCPM: { [key: string]: number } = {
+    '1': 8,   // 영화/애니
+    '10': 6,  // 음악
+    '15': 9,  // 애완동물
+    '17': 12, // 스포츠
+    '19': 8,  // 여행/이벤트
+    '20': 15, // 게임 (광고주 많음)
+    '22': 10, // 인물/블로그
+    '24': 7,  // 엔터테인먼트
+    '25': 18, // 뉴스/정치 (높은 CPM)
+    '26': 11, // 하우투/스타일
+    '27': 14, // 교육 (높은 CPM)
+    '28': 16, // 과학/기술 (매우 높은 CPM)
+    '29': 8,  // 비영리/사회운동
+  }
+
+  // 카테고리별 평균 계산
+  let totalCPM = 0
+  let count = 0
+  categoryIds.forEach(id => {
+    if (categoryBaseCPM[id]) {
+      totalCPM += categoryBaseCPM[id]
+      count++
+    }
+  })
+
+  const avgCPM = count > 0 ? totalCPM / count : 8 // 기본값 $8
+
+  // 숏폼은 롱폼보다 CPM이 낮음 (약 60%)
+  const multiplier = type === 'short' ? 0.6 : 1.0
+  
+  return Math.round(avgCPM * multiplier * 10) / 10
+}
+
+// 경쟁 강도 계산 (개선)
+function calculateCompetition(videoCount: number, avgViews: number, type: 'short' | 'long'): string {
+  // 영상 개수 점수 (40% 가중치)
+  let countScore = 0
+  if (videoCount < 15) countScore = 1
+  else if (videoCount < 30) countScore = 2
+  else if (videoCount < 50) countScore = 3
+  else countScore = 4
+
+  // 평균 조회수 점수 (60% 가중치)
+  let viewsScore = 0
+  const viewsThreshold = type === 'short' ? 100000 : 50000
+  
+  if (avgViews < viewsThreshold * 0.5) viewsScore = 1
+  else if (avgViews < viewsThreshold) viewsScore = 2
+  else if (avgViews < viewsThreshold * 2) viewsScore = 3
+  else viewsScore = 4
+
+  // 종합 점수 (가중 평균)
+  const finalScore = countScore * 0.4 + viewsScore * 0.6
+
+  if (finalScore < 2) return 'low'
+  if (finalScore < 3) return 'medium'
+  return 'high'
+}
+
 function calculateRevenueScore(shortsAnalysis: any, longAnalysis: any): number {
-  let score = 5 // 기본 점수
+  let score = 0
+  let weights = 0
 
+  // 롱폼 분석 (가중치 60%)
   if (longAnalysis) {
-    score += (longAnalysis.avg_views / 50000) * 2
-    score += longAnalysis.estimated_cpm / 2
+    // 조회수 점수 (0-4점)
+    const viewsScore = Math.min(4, (longAnalysis.avg_views / 50000) * 2)
+    
+    // CPM 점수 (0-3점)
+    const cpmScore = Math.min(3, longAnalysis.estimated_cpm / 6)
+    
+    // 참여율 점수 (0-2점)
+    const engagementScore = Math.min(2, longAnalysis.engagement_rate * 20)
+    
+    // 경쟁도 보너스/페널티 (0-1점)
+    const competitionScore = 
+      longAnalysis.competition === 'low' ? 1 : 
+      longAnalysis.competition === 'medium' ? 0.5 : 0
+
+    score += (viewsScore + cpmScore + engagementScore + competitionScore) * 0.6
+    weights += 0.6
   }
 
+  // 숏폼 분석 (가중치 40%)
   if (shortsAnalysis) {
-    score += (shortsAnalysis.avg_views / 100000)
+    // 조회수 점수 (0-4점)
+    const viewsScore = Math.min(4, (shortsAnalysis.avg_views / 100000) * 2)
+    
+    // CPM 점수 (0-2점)
+    const cpmScore = Math.min(2, shortsAnalysis.estimated_cpm / 3)
+    
+    // 참여율 점수 (0-2점)
+    const engagementScore = Math.min(2, shortsAnalysis.engagement_rate * 20)
+    
+    // 경쟁도 보너스/페널티 (0-2점)
+    const competitionScore = 
+      shortsAnalysis.competition === 'low' ? 2 : 
+      shortsAnalysis.competition === 'medium' ? 1 : 0
+
+    score += (viewsScore + cpmScore + engagementScore + competitionScore) * 0.4
+    weights += 0.4
   }
 
-  return Math.min(10, Math.max(1, Math.round(score * 10) / 10))
+  // 최종 점수 정규화 (1-10 범위)
+  const normalizedScore = weights > 0 ? score / weights : 5
+  return Math.min(10, Math.max(1, Math.round(normalizedScore * 10) / 10))
 }
 
 function calculateCompetitionLevel(videoCount: number): string {

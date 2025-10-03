@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { TrendingUp, Eye, Target, ArrowRight } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
@@ -296,10 +297,12 @@ export default function TopicsSection() {
 
         {/* View All Button */}
         <div className="text-center">
-          <Button size="lg" variant="outline">
-            모든 주제 보기
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
+          <Link href={activeTab === 'shorts' ? '/shorts' : '/long-form'}>
+            <Button size="lg" variant="outline">
+              모든 주제 보기
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
