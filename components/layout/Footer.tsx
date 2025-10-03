@@ -34,7 +34,7 @@ export default function Footer() {
               <span className="text-white font-bold text-xl">Topic Finder</span>
             </div>
             <p className="text-gray-400 text-sm">
-              데이터로 찾는 수익형 컨텐츠.<br />
+              데이터로 찾는 수익형 콘텐츠.<br />
               유튜브 크리에이터를 위한 AI 추천 플랫폼
             </p>
             <div className="flex space-x-4">

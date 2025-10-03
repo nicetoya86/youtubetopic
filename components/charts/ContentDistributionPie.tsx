@@ -35,6 +35,9 @@ const renderCustomizedLabel = ({
   const x = cx + radius * Math.cos(-midAngle * RADIAN)
   const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
+  // 5% 이하는 표시하지 않음
+  if (percent < 0.05) return null
+
   return (
     <text
       x={x}
@@ -42,11 +45,51 @@ const renderCustomizedLabel = ({
       fill="white"
       textAnchor={x > cx ? 'start' : 'end'}
       dominantBaseline="central"
-      style={{ fontSize: '14px', fontWeight: 'bold' }}
+      style={{ 
+        fontSize: '14px', 
+        fontWeight: 'bold',
+        textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.6)'
+      }}
     >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   )
+}
+
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0]
+    return (
+      <div 
+        style={{
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          border: '2px solid rgba(255,255,255,0.2)',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        }}
+      >
+        <p style={{ 
+          color: '#fff', 
+          fontWeight: 'bold', 
+          fontSize: '15px',
+          marginBottom: '4px'
+        }}>
+          {data.name}
+        </p>
+        <p style={{ 
+          color: '#00E5FF', 
+          fontSize: '14px',
+          fontWeight: '600'
+        }}>
+          {data.value}개 주제 ({((data.value / data.payload.total) * 100 || data.percent * 100).toFixed(1)}%)
+        </p>
+      </div>
+    )
+  }
+  return null
 }
 
 export default function ContentDistributionPie({ data = defaultData }: ContentDistributionPieProps) {
@@ -82,15 +125,7 @@ export default function ContentDistributionPie({ data = defaultData }: ContentDi
               />
             ))}
           </Pie>
-          <Tooltip
-            contentStyle={{
-              backgroundColor: 'rgba(15, 23, 42, 0.9)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px',
-              backdropFilter: 'blur(10px)',
-            }}
-            formatter={(value: any, name: string) => [`${value}개 주제`, name]}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend
             verticalAlign="bottom"
             height={36}

@@ -42,7 +42,7 @@ export default function HeroSection() {
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
             데이터로 찾는
             <br />
-            <span className="text-gradient">수익형 컨텐츠</span>
+            <span className="text-gradient">수익형 콘텐츠</span>
           </motion.h1>
 
           {/* Subheading */}
@@ -53,7 +53,7 @@ export default function HeroSection() {
             className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             AI가 분석한 유튜브 트렌드로 숏폼과 롱폼 주제를 추천받으세요.
             <br className="hidden sm:block" />
-            높은 수익성, 낮은 경쟁의 컨텐츠 주제를 지금 바로 시작하세요.
+            높은 수익성, 낮은 경쟁의 콘텐츠 주제를 지금 바로 시작하세요.
           </motion.p>
 
           {/* CTA Buttons */}

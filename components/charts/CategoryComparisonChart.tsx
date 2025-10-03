@@ -41,10 +41,10 @@ export default function CategoryComparisonChart({ data = defaultData }: Category
           <XAxis
             dataKey="category"
             stroke="#9CA3AF"
-            style={{ fontSize: '11px' }}
-            angle={-15}
-            textAnchor="end"
-            height={80}
+            style={{ fontSize: '12px' }}
+            angle={0}
+            textAnchor="middle"
+            height={60}
           />
           <YAxis
             stroke="#9CA3AF"
