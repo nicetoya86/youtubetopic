@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
@@ -7,7 +8,37 @@ import Button from '@/components/ui/Button'
 import FloatingOrbs from '@/components/3d/FloatingOrbs'
 import ParticleField from '@/components/3d/ParticleField'
 
+interface Stats {
+  total_topics: number
+  total_categories: number
+  accuracy_rate: number
+  last_updated: string
+  status: string
+}
+
 export default function HeroSection() {
+  const [stats, setStats] = useState<Stats>({
+    total_topics: 150,
+    total_categories: 15,
+    accuracy_rate: 98,
+    last_updated: new Date().toISOString(),
+    status: 'loading',
+  })
+
+  useEffect(() => {
+    fetchStats()
+  }, [])
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/stats')
+      const data = await response.json()
+      setStats(data)
+    } catch (error) {
+      console.error('Failed to fetch stats:', error)
+      // 폴백 데이터 유지
+    }
+  }
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Gradient Background */}
@@ -83,12 +114,16 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="grid grid-cols-3 gap-4 md:gap-8 max-w-3xl mx-auto pt-8">
             <div className="glass-light rounded-2xl p-4 md:p-6">
-              <div className="text-2xl md:text-4xl font-bold text-gradient">150+</div>
+              <div className="text-2xl md:text-4xl font-bold text-gradient">
+                {stats.total_topics}+
+              </div>
               <div className="text-xs md:text-sm text-gray-400 mt-1">추천 주제</div>
             </div>
             <div className="glass-light rounded-2xl p-4 md:p-6">
-              <div className="text-2xl md:text-4xl font-bold text-gradient">98%</div>
-              <div className="text-xs md:text-sm text-gray-400 mt-1">데이터 정확도</div>
+              <div className="text-2xl md:text-4xl font-bold text-gradient">
+                {stats.accuracy_rate}%
+              </div>
+              <div className="text-xs md:text-sm text-gray-400 mt-1">고수익 주제</div>
             </div>
             <div className="glass-light rounded-2xl p-4 md:p-6">
               <div className="text-2xl md:text-4xl font-bold text-gradient">24/7</div>
