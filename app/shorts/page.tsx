@@ -1,17 +1,92 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { TrendingUp, Eye, DollarSign } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
+import { supabase } from '@/lib/supabase'
 
-export const metadata = {
-  title: '숏폼 주제 추천 - YouTubeTopic',
-  description: '높은 수익성과 낮은 경쟁의 유튜브 숏폼 주제를 데이터 기반으로 추천합니다.',
+interface Topic {
+  id: string
+  title: string
+  category: string
+  revenueScore: number
+  competition: string
+  avgViews: string
+  cpm: string
+  trending: boolean
+  description: string
+  keywords: string[]
+  optimalLength: string
 }
 
 export default function ShortsPage() {
-  // 샘플 데이터 (실제로는 API에서 가져옴)
-  const topics = [
+  const [topics, setTopics] = useState<Topic[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchTopics()
+  }, [])
+
+  async function fetchTopics() {
+    const { data, error } = await supabase
+      .from('topics')
+      .select('*')
+      .eq('content_type', 'short')
+      .eq('is_active', true)
+      .order('revenue_score', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching topics:', error)
+      setLoading(false)
+      return
+    }
+
+    if (data) {
+      const formattedTopics: Topic[] = data.map((topic: any) => ({
+        id: topic.id,
+        title: topic.title,
+        category: getCategoryName(topic.category),
+        revenueScore: topic.revenue_score,
+        competition: topic.competition_level,
+        avgViews: formatViews(topic.avg_views),
+        cpm: `$${Math.floor(topic.estimated_cpm)}-${Math.ceil(topic.estimated_cpm * 1.2)}`,
+        trending: topic.revenue_score >= 8,
+        description: `${topic.title}에 대한 숏폼 컨텐츠. ${topic.competition_level === 'low' ? '경쟁이 낮고' : topic.competition_level === 'medium' ? '적절한 경쟁이 있으며' : '경쟁이 치열하지만'} 수익성이 ${topic.revenue_score >= 8 ? '높습니다' : '중간입니다'}.`,
+        keywords: topic.trending_keywords || ['컨텐츠', '숏폼', '유튜브'],
+        optimalLength: topic.video_length_min && topic.video_length_max 
+          ? `${topic.video_length_min}-${topic.video_length_max}초`
+          : '30-60초',
+      }))
+      setTopics(formattedTopics)
+    }
+    setLoading(false)
+  }
+
+  function formatViews(views: number): string {
+    if (views >= 1000000) {
+      return `${(views / 1000000).toFixed(1)}M`
+    }
+    return `${(views / 1000).toFixed(0)}K`
+  }
+
+  function getCategoryName(category: string): string {
+    const names: { [key: string]: string } = {
+      'finance': '금융/투자',
+      'education': '교육/강의',
+      'tech': '테크',
+      'health': '건강/피트니스',
+      'cooking': '요리',
+      'gaming': '게임',
+      'entertainment': '엔터테인먼트',
+    }
+    return names[category] || category
+  }
+
+  // 샘플 데이터 (백업용)
+  const sampleTopics = [
     {
       id: '1',
       title: '5분 재테크 팁',
@@ -136,8 +211,18 @@ export default function ShortsPage() {
       {/* Topics List */}
       <section className="py-16 bg-slate-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {topics.map((topic, index) => (
+          {loading ? (
+            <div className="text-center py-20">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-cyan"></div>
+              <p className="text-gray-400 mt-4">데이터 로딩 중...</p>
+            </div>
+          ) : topics.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-400 text-lg">숏폼 주제를 찾을 수 없습니다.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {topics.map((topic, index) => (
               <Card
                 key={topic.id}
                 hover
@@ -219,8 +304,9 @@ export default function ShortsPage() {
                   </div>
                 </div>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
