@@ -353,7 +353,11 @@ export default function LongFormPage() {
                                   <img
                                     src={video.thumbnail}
                                     alt={video.title}
-                                    className="w-24 h-16 object-cover rounded"
+                                    className="w-24 h-16 object-cover rounded bg-gray-800"
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement;
+                                      target.src = `https://img.youtube.com/vi/${video.videoId}/default.jpg`;
+                                    }}
                                   />
                                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/video:opacity-100 transition-opacity rounded flex items-center justify-center">
                                     <ExternalLink className="w-4 h-4 text-white" />
