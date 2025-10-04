@@ -9,7 +9,12 @@ interface KeywordTrendChartProps {
 export default function KeywordTrendChart({ data, keyword }: KeywordTrendChartProps) {
   return (
     <Card glass>
-      <h3 className="text-xl font-semibold text-white mb-6">월별 업로드 트렌드</h3>
+      <div className="mb-4">
+        <h3 className="text-xl font-semibold text-white mb-2">월별 업로드 트렌드</h3>
+        <p className="text-sm text-gray-400">
+          해당 키워드로 업로드된 영상 수를 월별로 집계한 데이터입니다
+        </p>
+      </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <defs>
@@ -36,7 +41,12 @@ export default function KeywordTrendChart({ data, keyword }: KeywordTrendChartPr
             }}
             labelStyle={{ color: '#fff', fontWeight: 'bold' }}
           />
-          <Bar dataKey="upload_count" fill="url(#trendGradient)" radius={[8, 8, 0, 0]} />
+          <Bar 
+            dataKey="upload_count" 
+            name="업로드 수"
+            fill="url(#trendGradient)" 
+            radius={[8, 8, 0, 0]} 
+          />
         </BarChart>
       </ResponsiveContainer>
     </Card>
