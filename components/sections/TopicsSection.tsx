@@ -2,11 +2,21 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { TrendingUp, Eye, Target, ArrowRight } from 'lucide-react'
+import { TrendingUp, Eye, Target, ArrowRight, ExternalLink, Youtube } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { supabase } from '@/lib/supabase'
+
+interface ExampleVideo {
+  videoId: string
+  title: string
+  channelTitle: string
+  thumbnail: string
+  url: string
+  views: number
+  publishedAt: string
+}
 
 interface Topic {
   id: string
@@ -17,6 +27,7 @@ interface Topic {
   avgViews: string
   cpm: string
   trending: boolean
+  exampleVideos?: ExampleVideo[]
 }
 
 export default function TopicsSection() {
@@ -56,6 +67,7 @@ export default function TopicsSection() {
         avgViews: formatViews(topic.avg_views),
         cpm: `$${topic.estimated_cpm.toFixed(0)}`,
         trending: topic.revenue_score >= 9,
+        exampleVideos: topic.example_videos || [],
       }))
       setTopics(formattedTopics)
     }
@@ -284,8 +296,47 @@ export default function TopicsSection() {
                   </div>
                 </div>
 
+                {/* 수익성 좋은 예시 영상 (홈페이지에서는 간략하게 표시) */}
+                {topic.exampleVideos && topic.exampleVideos.length > 0 && (
+                  <div className="pt-3 border-t border-white/5">
+                    <div className="flex items-center space-x-1 text-xs text-gray-400 mb-2">
+                      <Youtube className="w-3 h-3" />
+                      <span>수익성 좋은 예시</span>
+                    </div>
+                    <div className="space-y-2">
+                      {topic.exampleVideos.slice(0, 1).map((video) => (
+                        <a
+                          key={video.videoId}
+                          href={video.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block group/video hover:bg-white/5 rounded p-1.5 transition-colors"
+                        >
+                          <div className="flex space-x-2">
+                            <div className="relative flex-shrink-0">
+                              <img
+                                src={video.thumbnail}
+                                alt={video.title}
+                                className="w-16 h-10 object-cover rounded"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/video:opacity-100 transition-opacity rounded flex items-center justify-center">
+                                <ExternalLink className="w-3 h-3 text-white" />
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-white line-clamp-2 group-hover/video:text-primary-cyan transition-colors">
+                                {video.title}
+                              </p>
+                            </div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* CTA */}
-                <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors group/btn">
+                <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors group/btn mt-3">
                   <span className="text-sm text-gray-300 group-hover/btn:text-white">자세히 보기</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover/btn:text-white group-hover/btn:translate-x-1 transition-transform" />
                 </button>

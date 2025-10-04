@@ -3,10 +3,20 @@
 import { useEffect, useState } from 'react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import { TrendingUp, Eye, DollarSign } from 'lucide-react'
+import { TrendingUp, Eye, DollarSign, ExternalLink, Youtube } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Badge from '@/components/ui/Badge'
 import { supabase } from '@/lib/supabase'
+
+interface ExampleVideo {
+  videoId: string
+  title: string
+  channelTitle: string
+  thumbnail: string
+  url: string
+  views: number
+  publishedAt: string
+}
 
 interface Topic {
   id: string
@@ -20,6 +30,7 @@ interface Topic {
   description: string
   keywords: string[]
   optimalLength: string
+  exampleVideos: ExampleVideo[]
 }
 
 export default function ShortsPage() {
@@ -59,6 +70,7 @@ export default function ShortsPage() {
         optimalLength: topic.video_length_min && topic.video_length_max 
           ? `${topic.video_length_min}-${topic.video_length_max}초`
           : '30-60초',
+        exampleVideos: topic.example_videos || [],
       }))
       setTopics(formattedTopics)
     }
@@ -301,6 +313,51 @@ export default function ShortsPage() {
                         ))}
                       </div>
                     </div>
+
+                    {/* 수익성 좋은 예시 영상 */}
+                    {topic.exampleVideos && topic.exampleVideos.length > 0 && (
+                      <div className="pt-4 border-t border-white/5 mt-4">
+                        <div className="flex items-center space-x-1 text-xs text-gray-400 mb-3">
+                          <Youtube className="w-3.5 h-3.5" />
+                          <span>수익성 좋은 예시 영상</span>
+                        </div>
+                        <div className="space-y-2">
+                          {topic.exampleVideos.slice(0, 2).map((video) => (
+                            <a
+                              key={video.videoId}
+                              href={video.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block group/video hover:bg-white/5 rounded-lg p-2 transition-colors"
+                            >
+                              <div className="flex space-x-2">
+                                <div className="relative flex-shrink-0">
+                                  <img
+                                    src={video.thumbnail}
+                                    alt={video.title}
+                                    className="w-24 h-16 object-cover rounded"
+                                  />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/video:opacity-100 transition-opacity rounded flex items-center justify-center">
+                                    <ExternalLink className="w-4 h-4 text-white" />
+                                  </div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs text-white line-clamp-2 group-hover/video:text-primary-cyan transition-colors">
+                                    {video.title}
+                                  </p>
+                                  <p className="text-xs text-gray-500 mt-1">{video.channelTitle}</p>
+                                  {video.views && (
+                                    <p className="text-xs text-gray-500">
+                                      {formatViews(video.views)} 조회
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Card>
