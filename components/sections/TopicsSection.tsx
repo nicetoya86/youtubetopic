@@ -340,10 +340,13 @@ export default function TopicsSection() {
                 )}
 
                 {/* CTA */}
-                <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors group/btn mt-3">
+                <Link 
+                  href={activeTab === 'shorts' ? '/shorts' : '/long-form'}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-colors group/btn mt-3"
+                >
                   <span className="text-sm text-gray-300 group-hover/btn:text-white">자세히 보기</span>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover/btn:text-white group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                </Link>
               </div>
             </Card>
             ))}
