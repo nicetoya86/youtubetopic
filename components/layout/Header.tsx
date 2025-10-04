@@ -11,8 +11,8 @@ export default function Header() {
   const navItems = [
     { label: '숏폼 추천', href: '/shorts' },
     { label: '롱폼 추천', href: '/long-form' },
-    { label: '키워드 검색', href: '/keyword-search' },
     { label: '트렌드 분석', href: '/trends' },
+    { label: '키워드 검색', href: '/keyword-search' },
     { label: '도구', href: '/tools' },
   ]
 
