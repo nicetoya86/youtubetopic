@@ -102,7 +102,24 @@ export default function ScoreCard({
 
         {/* Competition Level */}
         <div className="glass-light rounded-xl p-6">
-          <div className="text-sm text-gray-400 mb-2">경쟁 강도</div>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="text-sm text-gray-400">경쟁 강도</div>
+            <div className="group relative">
+              <Info className="w-4 h-4 text-gray-500 cursor-help" />
+              <div className="invisible group-hover:visible absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 shadow-xl">
+                <div className="font-semibold text-white mb-1">경쟁 강도란?</div>
+                해당 키워드로 업로드되는 영상 수를 기반으로 경쟁 수준을 평가합니다.
+                <div className="mt-2 space-y-1">
+                  <div>• 낮음: 진입 장벽이 낮고 기회 많음</div>
+                  <div>• 중간: 적절한 경쟁, 차별화 필요</div>
+                  <div>• 높음: 치열한 경쟁, 고품질 필수</div>
+                </div>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                  <div className="border-4 border-transparent border-t-slate-800"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className={`text-5xl font-bold ${getCompetitionColor(competitionLevel)} mb-2`}>
             {getCompetitionText(competitionLevel)}
           </div>
@@ -115,7 +132,24 @@ export default function ScoreCard({
 
         {/* Recommendation */}
         <div className="glass-light rounded-xl p-6">
-          <div className="text-sm text-gray-400 mb-2">추천도</div>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <div className="text-sm text-gray-400">추천도</div>
+            <div className="group relative">
+              <Info className="w-4 h-4 text-gray-500 cursor-help" />
+              <div className="invisible group-hover:visible absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg text-xs text-gray-300 shadow-xl">
+                <div className="font-semibold text-white mb-1">추천도란?</div>
+                수익성 점수와 경쟁 강도를 종합하여 해당 주제의 도전 가치를 평가합니다.
+                <div className="mt-2 space-y-1">
+                  <div>• 매우 추천: 높은 수익성 + 낮은 경쟁</div>
+                  <div>• 추천: 적절한 수익성과 경쟁도</div>
+                  <div>• 주의: 신중한 접근과 차별화 필요</div>
+                </div>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+                  <div className="border-4 border-transparent border-t-slate-800"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <Icon className={`w-12 h-12 ${recommendation.color} mx-auto mb-3`} />
           <div className={`text-sm font-semibold ${recommendation.color}`}>
             {recommendation.text}
